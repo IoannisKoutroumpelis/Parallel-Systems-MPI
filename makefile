@@ -1,43 +1,29 @@
-# Compiler settings
 CC = mpicc
 CFLAGS = -O3 -Wall -Wextra
+BIN_DIR = bin
+SRC_DIR = src
 
-# Executable names
-EXEC1 = q3-1
-EXEC2 = q3-2
+# Τα ονόματα των εκτελέσιμων (με παύλες)
+TARGETS = q3-1 q3-2
 
-# Source files
-SRC1 = q3-1.c
-SRC2 = q3-2.c
+# Οι πλήρεις διαδρομές των εκτελέσιμων (bin/q3-1, bin/q3-2)
+EXECS = $(patsubst %,$(BIN_DIR)/%,$(TARGETS))
 
-NP ?= 4
+all: $(BIN_DIR) $(EXECS)
 
-DEG ?= 10000
+# Δημιουργία του φακέλου bin αν δεν υπάρχει
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
 
-SIZE ?= 2000
-SPAR ?= 0.9
-ITER ?= 10
-all: $(EXEC1) $(EXEC2)
+# Κανόνας για το q3-1
+$(BIN_DIR)/q3-1: $(SRC_DIR)/q3-1.c
+	$(CC) $(CFLAGS) -o $@ $<
 
-$(EXEC1): $(SRC1)
-	$(CC) $(CFLAGS) -o $(EXEC1) $(SRC1)
-
-$(EXEC2): $(SRC2)
-	$(CC) $(CFLAGS) -o $(EXEC2) $(SRC2)
-
-
-run1: $(EXEC1)
-	@echo "--- Running Polynomial Multiplication (q3-1) ---"
-	@echo "Processes: $(NP), Degree: $(DEG)"
-	mpirun -np $(NP) ./$(EXEC1) $(DEG)
-
-run2: $(EXEC2)
-	@echo "--- Running Sparse Matrix Multiplication (q3-2) ---"
-	@echo "Processes: $(NP), Size: $(SIZE), Sparsity: $(SPAR), Iterations: $(ITER)"
-	mpirun -np $(NP) ./$(EXEC2) $(SIZE) $(SPAR) $(ITER)
-
+# Κανόνας για το q3-2
+$(BIN_DIR)/q3-2: $(SRC_DIR)/q3-2.c
+	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm -f $(EXEC1) $(EXEC2)
+	rm -rf $(BIN_DIR)
 
-.PHONY: all clean run1 run2
+.PHONY: all clean
