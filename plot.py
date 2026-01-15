@@ -2,11 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-# Φάκελοι
 FIG_DIR = "test/fig"
 RESULTS_DIR = "test/results"
 
-# Δημιουργία φακέλου για τις εικόνες
 os.makedirs(FIG_DIR, exist_ok=True)
 
 def plot_q3_1():
@@ -15,7 +13,6 @@ def plot_q3_1():
         print(f"File not found: {file_path}")
         return
     
-    # Ανάγνωση δεδομένων (διαχωριστικό το κενό)
     df = pd.read_csv(file_path, sep=' ')
     
     plt.figure(figsize=(10, 6))
@@ -40,7 +37,6 @@ def plot_q3_2():
     
     df = pd.read_csv(file_path, sep=' ')
     
-    # Γράφημα σύγκρισης CSR vs Dense για 4 διεργασίες
     subset_spar = df[df['Procs'] == 4]
     if not subset_spar.empty:
         plt.figure(figsize=(10, 6))
